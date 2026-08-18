@@ -2,7 +2,7 @@
 -- PHASE 1: SCHOOL MANAGEMENT SAAS - SEED DATA SCRIPT
 -- ==============================================================================
 
--- 1. SEED AUTH USERS (Placeholders for UUIDs in local/test environment)
+-- 1. SEED AUTH USERS & APP DATA
 -- Parent 1 (Eleanor Vance - 2 children: Leo Vance in 10-A, Maya Vance in 7-B)
 -- Parent 2 (David Miller - 1 child: Ethan Miller in 10-A)
 -- Teacher 1 (Dr. Sarah Jenkins - Classes 10-A, 10-B; also mother to Lucas Jenkins in 8-A -> Dual Role)
@@ -27,7 +27,28 @@ DECLARE
     sid_noah UUID := 'a0000006-0000-0000-0000-000000000006';
     sid_emma UUID := 'a0000007-0000-0000-0000-000000000007';
     sid_oliver UUID := 'a0000008-0000-0000-0000-000000000008';
+
+    -- Notice UUIDs
+    nid_science UUID := 'b0000001-0000-0000-0000-000000000001';
+    nid_conference UUID := 'b0000002-0000-0000-0000-000000000002';
+    nid_biology UUID := 'b0000003-0000-0000-0000-000000000003';
+    nid_math UUID := 'b0000004-0000-0000-0000-000000000004';
 BEGIN
+
+    -- Create corresponding records in auth.users if running directly on Supabase
+    BEGIN
+        INSERT INTO auth.users (id, instance_id, email, encrypted_password, email_confirmed_at, raw_app_meta_data, raw_user_meta_data, created_at, updated_at, role, aud)
+        VALUES
+        (uid_parent_eleanor, '00000000-0000-0000-0000-000000000000', 'parent1@school.com', crypt('password123', gen_salt('bf')), NOW(), '{"provider":"email","providers":["email"]}', '{"full_name":"Eleanor Vance"}', NOW(), NOW(), 'authenticated', 'authenticated'),
+        (uid_parent_david, '00000000-0000-0000-0000-000000000000', 'parent2@school.com', crypt('password123', gen_salt('bf')), NOW(), '{"provider":"email","providers":["email"]}', '{"full_name":"David Miller"}', NOW(), NOW(), 'authenticated', 'authenticated'),
+        (uid_teacher_sarah, '00000000-0000-0000-0000-000000000000', 'teacher1@school.com', crypt('password123', gen_salt('bf')), NOW(), '{"provider":"email","providers":["email"]}', '{"full_name":"Dr. Sarah Jenkins"}', NOW(), NOW(), 'authenticated', 'authenticated'),
+        (uid_teacher_robert, '00000000-0000-0000-0000-000000000000', 'teacher2@school.com', crypt('password123', gen_salt('bf')), NOW(), '{"provider":"email","providers":["email"]}', '{"full_name":"Prof. Robert Chen"}', NOW(), NOW(), 'authenticated', 'authenticated'),
+        (uid_admin_marcus, '00000000-0000-0000-0000-000000000000', 'admin@school.com', crypt('password123', gen_salt('bf')), NOW(), '{"provider":"email","providers":["email"]}', '{"full_name":"Principal Marcus Sterling"}', NOW(), NOW(), 'authenticated', 'authenticated')
+        ON CONFLICT (id) DO NOTHING;
+    EXCEPTION
+        WHEN OTHERS THEN
+            RAISE NOTICE 'Skipping auth.users insertion: %', SQLERRM;
+    END;
 
     -- 2. INSERT USER ROLES
     INSERT INTO public.user_roles (user_id, role) VALUES
@@ -41,15 +62,15 @@ BEGIN
 
     -- 3. INSERT GUARDIANS
     INSERT INTO public.guardians (id, full_name, phone, email) VALUES
-    (uid_parent_eleanor, 'Eleanor Vance', '+1 (555) 234-8901', 'eleanor.vance@example.com'),
-    (uid_parent_david, 'David Miller', '+1 (555) 987-6543', 'david.miller@example.com'),
-    (uid_teacher_sarah, 'Dr. Sarah Jenkins', '+1 (555) 432-1098', 'sarah.jenkins@example.com')
+    (uid_parent_eleanor, 'Eleanor Vance', '+1 (555) 234-8901', 'parent1@school.com'),
+    (uid_parent_david, 'David Miller', '+1 (555) 987-6543', 'parent2@school.com'),
+    (uid_teacher_sarah, 'Dr. Sarah Jenkins', '+1 (555) 432-1098', 'teacher1@school.com')
     ON CONFLICT (id) DO UPDATE SET full_name = EXCLUDED.full_name, phone = EXCLUDED.phone;
 
     -- 4. INSERT TEACHERS
     INSERT INTO public.teachers (id, full_name, phone, email, subjects) VALUES
-    (uid_teacher_sarah, 'Dr. Sarah Jenkins', '+1 (555) 432-1098', 'sarah.jenkins@example.com', ARRAY['Biology', 'General Science', 'Chemistry']),
-    (uid_teacher_robert, 'Prof. Robert Chen', '+1 (555) 876-5432', 'robert.chen@example.com', ARRAY['Mathematics', 'Advanced Calculus', 'Physics'])
+    (uid_teacher_sarah, 'Dr. Sarah Jenkins', '+1 (555) 432-1098', 'teacher1@school.com', ARRAY['Biology', 'General Science', 'Chemistry']),
+    (uid_teacher_robert, 'Prof. Robert Chen', '+1 (555) 876-5432', 'teacher2@school.com', ARRAY['Mathematics', 'Advanced Calculus', 'Physics'])
     ON CONFLICT (id) DO UPDATE SET subjects = EXCLUDED.subjects;
 
     -- 5. TEACHER CLASS ASSIGNMENTS
@@ -81,14 +102,20 @@ BEGIN
     ON CONFLICT (guardian_id, student_id) DO NOTHING;
 
     -- 8. INSERT NOTICES
-    INSERT INTO public.notices (id, title, body, target_class, target_section, posted_by, created_at) VALUES
-    (gen_random_uuid(), 'Annual Science & Tech Fair 2026', 'We are thrilled to announce the 2026 Annual Science Fair scheduled for next Friday. All students in Grades 9–12 are invited to present their capstone experiments in the main auditorium.', NULL, NULL, uid_admin_marcus, NOW() - INTERVAL '2 days'),
-    (gen_random_uuid(), 'Parent-Teacher Conference Schedule', 'Term 2 Parent-Teacher Conferences will take place this Thursday starting at 3:30 PM. Slots can be confirmed through the school reception.', NULL, NULL, uid_admin_marcus, NOW() - INTERVAL '4 days'),
-    (gen_random_uuid(), 'Grade 10 Biology Lab Field Trip', 'Grade 10-A and 10-B will be visiting the Marine Biology Research Center next Tuesday morning. Please ensure lab safety permission forms are acknowledged.', '10', NULL, uid_teacher_sarah, NOW() - INTERVAL '1 day'),
-    (gen_random_uuid(), 'Grade 10-A Math Quiz Announcement', 'A reminder that the Quadratic Equations review quiz for Section 10-A will be held this Wednesday during Period 3.', '10', 'A', uid_teacher_robert, NOW() - INTERVAL '12 hours')
-    ON CONFLICT DO NOTHING;
+    INSERT INTO public.notices (id, title, body, target_class, target_section, posted_by, requires_acknowledgment, created_at) VALUES
+    (nid_science, 'Annual Science & Tech Fair 2026', 'We are thrilled to announce the 2026 Annual Science Fair scheduled for next Friday. All students in Grades 9–12 are invited to present their capstone experiments in the main auditorium.', NULL, NULL, uid_admin_marcus, true, NOW() - INTERVAL '2 days'),
+    (nid_conference, 'Parent-Teacher Conference Schedule', 'Term 2 Parent-Teacher Conferences will take place this Thursday starting at 3:30 PM. Slots can be confirmed through the school reception.', NULL, NULL, uid_admin_marcus, true, NOW() - INTERVAL '4 days'),
+    (nid_biology, 'Grade 10 Biology Lab Field Trip', 'Grade 10-A and 10-B will be visiting the Marine Biology Research Center next Tuesday morning. Please ensure lab safety permission forms are acknowledged.', '10', NULL, uid_teacher_sarah, true, NOW() - INTERVAL '1 day'),
+    (nid_math, 'Grade 10-A Math Quiz Announcement', 'A reminder that the Quadratic Equations review quiz for Section 10-A will be held this Wednesday during Period 3.', '10', 'A', uid_teacher_robert, false, NOW() - INTERVAL '12 hours')
+    ON CONFLICT (id) DO NOTHING;
 
-    -- 9. SEED ATTENDANCE RECORDS (Past 10 days for students)
+    -- 9. INSERT NOTICE ACKNOWLEDGMENTS
+    INSERT INTO public.notice_acknowledgments (id, notice_id, user_id, student_id, acknowledged_at) VALUES
+    (gen_random_uuid(), nid_conference, uid_parent_eleanor, sid_leo, NOW() - INTERVAL '3 days'),
+    (gen_random_uuid(), nid_science, uid_parent_david, sid_ethan, NOW() - INTERVAL '1 day')
+    ON CONFLICT (notice_id, user_id, student_id) DO NOTHING;
+
+    -- 10. SEED ATTENDANCE RECORDS (Past 10 days for students)
     INSERT INTO public.attendance (student_id, date, status, marked_by) VALUES
     -- Leo Vance (10-A)
     (sid_leo, CURRENT_DATE, 'present', uid_teacher_sarah),
