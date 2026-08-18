@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+
 import Link from "next/link";
 import { useAuth } from "@/lib/context/AuthContext";
 import { useRouter } from "next/navigation";
@@ -17,6 +18,21 @@ export default function LoginPage() {
   const [isDemoDrawerOpen, setIsDemoDrawerOpen] = useState(false);
   const { login, loginAsDemo } = useAuth();
   const router = useRouter();
+
+  const [greeting, setGreeting] = useState("Welcome");
+
+  useEffect(() => {
+    const hour = new Date().getHours();
+    if (hour >= 4 && hour < 12) {
+      setGreeting("Good Morning");
+    } else if (hour >= 12 && hour < 17) {
+      setGreeting("Good Afternoon");
+    } else if (hour >= 17 && hour < 22) {
+      setGreeting("Good Evening");
+    } else {
+      setGreeting("Good Evening");
+    }
+  }, []);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -65,12 +81,13 @@ export default function LoginPage() {
               Mo-School
             </h2>
             <h1 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight mt-1">
-              Welcome Back
+              {greeting}
             </h1>
             <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
               Unified Portal • Single Entry for Parents, Teachers & Administrators
             </p>
           </div>
+
 
           {/* Error Banner */}
           {error && (
