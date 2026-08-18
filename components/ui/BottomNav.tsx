@@ -43,7 +43,7 @@ export function BottomNav({ activeTab, onChangeTab, role }: BottomNavProps) {
 
   return (
     <div className="fixed bottom-0 left-0 right-0 z-40 p-2.5 sm:p-4 max-w-lg mx-auto pointer-events-none">
-      <nav className="glass-dock pointer-events-auto rounded-full px-2 sm:px-3 py-1.5 sm:py-2 flex items-center justify-around shadow-[0_12px_32px_rgba(0,0,0,0.12)] border border-white/60">
+      <nav className="glass-dock pointer-events-auto rounded-full px-2 sm:px-3 py-1.5 sm:py-2 flex items-center justify-around shadow-[0_12px_32px_rgba(0,0,0,0.12)] dark:shadow-[0_12px_32px_rgba(0,0,0,0.5)] border border-white/60 dark:border-white/10">
         {tabs.map((tab) => {
           const Icon = tab.icon;
           const isActive = activeTab === tab.id;
@@ -54,12 +54,12 @@ export function BottomNav({ activeTab, onChangeTab, role }: BottomNavProps) {
               onClick={() => onChangeTab(tab.id)}
               className={`flex flex-col items-center justify-center py-1 sm:py-1.5 px-2.5 sm:px-4 rounded-full transition-all duration-200 ${
                 isActive
-                  ? "bg-[#111827] text-white shadow-sm"
-                  : "text-slate-500 hover:text-slate-800 hover:bg-slate-100/60"
+                  ? "bg-[#111827] dark:bg-slate-100 text-white dark:text-slate-900 shadow-sm"
+                  : "text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-100/60 dark:hover:bg-slate-800/60"
               }`}
             >
-              <Icon className={`w-4 h-4 sm:w-5 sm:h-5 ${isActive ? "text-white stroke-[2.2]" : "stroke-[1.8]"}`} />
-              <span className={`text-[9px] sm:text-[10px] mt-0.5 tracking-tight font-medium ${isActive ? "text-white" : ""}`}>
+              <Icon className={`w-4 h-4 sm:w-5 sm:h-5 ${isActive ? "text-white dark:text-slate-900 stroke-[2.2]" : "stroke-[1.8]"}`} />
+              <span className={`text-[9px] sm:text-[10px] mt-0.5 tracking-tight font-medium ${isActive ? "text-white dark:text-slate-900 font-bold" : ""}`}>
                 {tab.label}
               </span>
             </button>
@@ -67,6 +67,7 @@ export function BottomNav({ activeTab, onChangeTab, role }: BottomNavProps) {
         })}
       </nav>
     </div>
+
   );
 }
 

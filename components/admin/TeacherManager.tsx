@@ -57,12 +57,12 @@ export function TeacherManager({ teachers, assignments, onAddTeacher }: TeacherM
   };
 
   return (
-    <div className="bg-white rounded-3xl p-4 sm:p-6 shadow-card border border-black/[0.03] space-y-4 sm:space-y-5">
+    <div className="bg-white dark:bg-[#111827] rounded-3xl p-4 sm:p-6 shadow-card border border-black/[0.03] dark:border-white/10 space-y-4 sm:space-y-5 transition-colors">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100 dark:border-slate-800">
         <div>
-          <h3 className="text-base font-bold text-slate-900">Faculty & Teachers Directory</h3>
-          <p className="text-xs text-slate-500">Manage teaching staff and classroom assignments</p>
+          <h3 className="text-base font-bold text-slate-900 dark:text-white">Faculty & Teachers Directory</h3>
+          <p className="text-xs text-slate-500 dark:text-slate-400">Manage teaching staff and classroom assignments</p>
         </div>
 
         <Button
@@ -83,19 +83,19 @@ export function TeacherManager({ teachers, assignments, onAddTeacher }: TeacherM
           return (
             <div
               key={teacher.id}
-              className="p-4 rounded-2xl border border-slate-100 bg-slate-50/60 hover:bg-slate-50 transition-all space-y-3"
+              className="p-4 rounded-2xl border border-slate-100 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-800/40 hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-all space-y-3"
             >
               <div className="flex items-start justify-between gap-2">
                 <div className="flex items-center gap-3 min-w-0">
-                  <div className="w-10 h-10 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold text-sm shrink-0 border border-indigo-100">
+                  <div className="w-10 h-10 rounded-2xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 flex items-center justify-center font-bold text-sm shrink-0 border border-indigo-100 dark:border-indigo-800/60">
                     {teacher.full_name.charAt(0)}
                   </div>
                   <div className="min-w-0">
-                    <h4 className="text-sm font-bold text-slate-900 truncate">{teacher.full_name}</h4>
-                    <span className="text-[11px] text-slate-500 truncate block">{teacher.email}</span>
+                    <h4 className="text-sm font-bold text-slate-900 dark:text-white truncate">{teacher.full_name}</h4>
+                    <span className="text-[11px] text-slate-500 dark:text-slate-400 truncate block">{teacher.email}</span>
                   </div>
                 </div>
-                <span className="text-[10px] font-bold text-indigo-700 bg-indigo-50 px-2.5 py-0.5 rounded-full border border-indigo-200/60 shrink-0">
+                <span className="text-[10px] font-bold text-indigo-700 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-950/60 px-2.5 py-0.5 rounded-full border border-indigo-200/60 dark:border-indigo-800/60 shrink-0">
                   {teacherAssigned.length} Classes
                 </span>
               </div>
@@ -105,7 +105,7 @@ export function TeacherManager({ teachers, assignments, onAddTeacher }: TeacherM
                 {teacher.subjects.map((sub) => (
                   <span
                     key={sub}
-                    className="bg-white text-slate-700 border border-slate-200 text-[10px] font-semibold px-2 py-0.5 rounded-lg"
+                    className="bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 text-[10px] font-semibold px-2 py-0.5 rounded-lg"
                   >
                     {sub}
                   </span>
@@ -113,13 +113,13 @@ export function TeacherManager({ teachers, assignments, onAddTeacher }: TeacherM
               </div>
 
               {/* Assigned Classes */}
-              <div className="pt-2.5 border-t border-slate-200/60 flex items-center justify-between text-xs">
-                <span className="text-slate-400 text-[11px] font-medium">Assigned:</span>
+              <div className="pt-2.5 border-t border-slate-200/60 dark:border-slate-700/60 flex items-center justify-between text-xs">
+                <span className="text-slate-400 dark:text-slate-500 text-[11px] font-medium">Assigned:</span>
                 <div className="flex flex-wrap gap-1.5 justify-end">
                   {teacherAssigned.map((a, idx) => (
                     <span
                       key={idx}
-                      className="bg-slate-900 text-white font-mono text-[10px] font-bold px-2 py-0.5 rounded-md"
+                      className="bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 font-mono text-[10px] font-bold px-2 py-0.5 rounded-md"
                     >
                       {a.class}-{a.section}
                     </span>
@@ -131,6 +131,7 @@ export function TeacherManager({ teachers, assignments, onAddTeacher }: TeacherM
         })}
       </div>
 
+
       {/* Add Teacher Modal */}
       <Modal
         isOpen={isAddModalOpen}
@@ -140,7 +141,7 @@ export function TeacherManager({ teachers, assignments, onAddTeacher }: TeacherM
       >
         <form onSubmit={handleFormSubmit} className="space-y-4 pt-2">
           <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">
+            <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400 mb-1">
               Full Name *
             </label>
             <input
@@ -149,13 +150,13 @@ export function TeacherManager({ teachers, assignments, onAddTeacher }: TeacherM
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
               placeholder="e.g. Dr. Eleanor Gray"
-              className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-900 focus:bg-white focus:outline-none"
+              className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:bg-white dark:focus:bg-slate-800 focus:outline-none"
             />
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400 mb-1">
                 Email Address *
               </label>
               <input
@@ -164,12 +165,12 @@ export function TeacherManager({ teachers, assignments, onAddTeacher }: TeacherM
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="teacher@school.com"
-                className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-900 focus:bg-white focus:outline-none"
+                className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:bg-white dark:focus:bg-slate-800 focus:outline-none"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400 mb-1">
                 Phone Number *
               </label>
               <input
@@ -178,13 +179,13 @@ export function TeacherManager({ teachers, assignments, onAddTeacher }: TeacherM
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 placeholder="+1 (555) 000-0000"
-                className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-900 focus:bg-white focus:outline-none"
+                className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:bg-white dark:focus:bg-slate-800 focus:outline-none"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">
+            <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400 mb-1">
               Subjects (comma separated)
             </label>
             <input
@@ -192,21 +193,21 @@ export function TeacherManager({ teachers, assignments, onAddTeacher }: TeacherM
               value={subjectsText}
               onChange={(e) => setSubjectsText(e.target.value)}
               placeholder="Mathematics, Physics, Geometry"
-              className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-900 focus:bg-white focus:outline-none"
+              className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:bg-white dark:focus:bg-slate-800 focus:outline-none"
             />
           </div>
 
-          <div className="p-3.5 bg-slate-50 rounded-2xl border border-slate-100">
-            <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-2">
+          <div className="p-3.5 bg-slate-50 dark:bg-slate-800/80 rounded-2xl border border-slate-100 dark:border-slate-700">
+            <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400 mb-2">
               Class & Section Assignment
             </label>
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <span className="text-[10px] text-slate-400 uppercase font-medium">Grade</span>
+                <span className="text-[10px] text-slate-400 dark:text-slate-500 uppercase font-medium">Grade</span>
                 <select
                   value={assignedClass}
                   onChange={(e) => setAssignedClass(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs font-bold text-slate-900 mt-1"
+                  className="w-full px-3 py-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-900 dark:text-slate-100 mt-1 focus:outline-none"
                 >
                   <option value="10">Grade 10</option>
                   <option value="9">Grade 9</option>
@@ -216,11 +217,11 @@ export function TeacherManager({ teachers, assignments, onAddTeacher }: TeacherM
               </div>
 
               <div>
-                <span className="text-[10px] text-slate-400 uppercase font-medium">Section</span>
+                <span className="text-[10px] text-slate-400 dark:text-slate-500 uppercase font-medium">Section</span>
                 <select
                   value={assignedSection}
                   onChange={(e) => setAssignedSection(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs font-bold text-slate-900 mt-1"
+                  className="w-full px-3 py-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-900 dark:text-slate-100 mt-1 focus:outline-none"
                 >
                   <option value="A">Section A</option>
                   <option value="B">Section B</option>
@@ -230,11 +231,11 @@ export function TeacherManager({ teachers, assignments, onAddTeacher }: TeacherM
             </div>
           </div>
 
-          <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
+          <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
             <button
               type="button"
               onClick={() => setIsAddModalOpen(false)}
-              className="text-xs font-medium text-slate-500 hover:text-slate-800 px-3 py-2"
+              className="text-xs font-medium text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 px-3 py-2"
             >
               Cancel
             </button>
@@ -249,6 +250,7 @@ export function TeacherManager({ teachers, assignments, onAddTeacher }: TeacherM
           </div>
         </form>
       </Modal>
+
     </div>
   );
 }

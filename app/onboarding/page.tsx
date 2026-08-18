@@ -14,6 +14,7 @@ import { Step5AdminProfile } from "@/components/onboarding/Step5AdminProfile";
 import { Step6LaunchSummary } from "@/components/onboarding/Step6LaunchSummary";
 import { Sparkles, Building, ArrowLeft } from "lucide-react";
 import Link from "next/link";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
 
 export default function OnboardingPage() {
   const router = useRouter();
@@ -57,27 +58,31 @@ export default function OnboardingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F6F7FB] py-8 px-4 sm:px-6">
+    <div className="min-h-screen bg-[#F6F7FB] dark:bg-[#0B0F17] py-6 sm:py-8 px-4 sm:px-6 transition-colors duration-200">
       <div className="max-w-4xl mx-auto space-y-6">
         {/* Top Header Bar */}
         <div className="flex items-center justify-between pb-2">
           <Link
             href="/"
-            className="flex items-center gap-2 text-xs font-bold text-slate-500 hover:text-slate-900 transition-colors"
+            className="flex items-center gap-2 text-xs font-bold text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
             Back to Portal Login
           </Link>
 
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-xl bg-slate-900 flex items-center justify-center text-white font-bold text-xs shadow-sm">
-              <Building className="w-4 h-4 text-orange-400" />
+          <div className="flex items-center gap-3">
+            <ThemeToggle size="sm" />
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-xl bg-slate-900 dark:bg-slate-800 flex items-center justify-center text-white font-bold text-xs shadow-sm border border-slate-700">
+                <Building className="w-4 h-4 text-orange-400" />
+              </div>
+              <span className="text-xs font-extrabold text-slate-900 dark:text-white hidden sm:inline">
+                School Setup Wizard
+              </span>
             </div>
-            <span className="text-xs font-extrabold text-slate-900">
-              School Setup Wizard
-            </span>
           </div>
         </div>
+
 
         {/* Step Indicator */}
         <StepIndicator

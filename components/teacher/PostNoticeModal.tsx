@@ -66,7 +66,7 @@ export function PostNoticeModal({
       <form onSubmit={handleSubmit} className="space-y-4 pt-2">
         {/* Notice Title */}
         <div>
-          <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">
+          <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400 mb-1.5">
             Notice Title *
           </label>
           <input
@@ -75,13 +75,13 @@ export function PostNoticeModal({
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="e.g. Science Lab Field Trip Permission Slips Due"
-            className="w-full px-4 py-2.5 rounded-2xl bg-slate-50 border border-slate-200 text-sm text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 transition-all"
+            className="w-full px-4 py-2.5 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:bg-white dark:focus:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 transition-all"
           />
         </div>
 
         {/* Target Audience Picker */}
         <div>
-          <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">
+          <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400 mb-1.5">
             Target Audience *
           </label>
           <div className="grid grid-cols-2 gap-2 mb-3">
@@ -90,8 +90,8 @@ export function PostNoticeModal({
               onClick={() => setTargetType("school")}
               className={`p-3 rounded-2xl text-xs font-bold border transition-all text-center ${
                 targetType === "school"
-                  ? "bg-[#111827] text-white border-[#111827] shadow-sm"
-                  : "bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100"
+                  ? "bg-[#111827] dark:bg-slate-100 text-white dark:text-slate-900 border-[#111827] dark:border-slate-100 shadow-sm"
+                  : "bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700"
               }`}
             >
               School-Wide (All Grades)
@@ -101,8 +101,8 @@ export function PostNoticeModal({
               onClick={() => setTargetType("class")}
               className={`p-3 rounded-2xl text-xs font-bold border transition-all text-center ${
                 targetType === "class"
-                  ? "bg-[#111827] text-white border-[#111827] shadow-sm"
-                  : "bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100"
+                  ? "bg-[#111827] dark:bg-slate-100 text-white dark:text-slate-900 border-[#111827] dark:border-slate-100 shadow-sm"
+                  : "bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700"
               }`}
             >
               Specific Class / Section
@@ -111,15 +111,15 @@ export function PostNoticeModal({
 
           {/* Conditional Class & Section Selectors */}
           {targetType === "class" && (
-            <div className="grid grid-cols-2 gap-3 p-3 rounded-2xl bg-slate-50 border border-slate-100 animate-fade-in">
+            <div className="grid grid-cols-2 gap-3 p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-700 animate-fade-in">
               <div>
-                <label className="block text-[11px] font-medium text-slate-500 mb-1">
+                <label className="block text-[11px] font-medium text-slate-500 dark:text-slate-400 mb-1">
                   Grade / Class
                 </label>
                 <select
                   value={selectedClass}
                   onChange={(e) => setSelectedClass(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+                  className="w-full px-3 py-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
                 >
                   <option value="10">Grade 10</option>
                   <option value="9">Grade 9</option>
@@ -129,13 +129,13 @@ export function PostNoticeModal({
               </div>
 
               <div>
-                <label className="block text-[11px] font-medium text-slate-500 mb-1">
+                <label className="block text-[11px] font-medium text-slate-500 dark:text-slate-400 mb-1">
                   Section
                 </label>
                 <select
                   value={selectedSection}
                   onChange={(e) => setSelectedSection(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl bg-white border border-slate-200 text-xs font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+                  className="w-full px-3 py-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
                 >
                   <option value="A">Section A</option>
                   <option value="B">Section B</option>
@@ -146,9 +146,9 @@ export function PostNoticeModal({
           )}
         </div>
 
-        {/* Notice Body */}
+        {/* Notice Message Body */}
         <div>
-          <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">
+          <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400 mb-1.5">
             Notice Body / Message *
           </label>
           <textarea
@@ -156,40 +156,36 @@ export function PostNoticeModal({
             rows={4}
             value={body}
             onChange={(e) => setBody(e.target.value)}
-            placeholder="Type your full announcement message here..."
-            className="w-full px-4 py-3 rounded-2xl bg-slate-50 border border-slate-200 text-sm text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 transition-all resize-none"
+            placeholder="Write the full announcement details here..."
+            className="w-full px-4 py-2.5 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:bg-white dark:focus:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 transition-all resize-none"
           />
         </div>
 
-        {/* Mandatory Acknowledgment Toggle */}
-        <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/70 flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <div className="p-2 rounded-xl bg-amber-50 text-amber-700">
-              <ShieldAlert className="w-4 h-4" />
-            </div>
-            <div>
-              <div className="text-xs font-bold text-slate-900">
-                Require Mandatory Parent Acknowledgment
-              </div>
-              <div className="text-[11px] text-slate-500">
-                Stores digital receipt in Supabase when acknowledged by parent
-              </div>
-            </div>
-          </div>
+        {/* Mandatory Parent Acknowledgment Checkbox Toggle */}
+        <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700 flex items-start gap-3">
           <input
             type="checkbox"
+            id="requires-ack"
             checked={requiresAck}
             onChange={(e) => setRequiresAck(e.target.checked)}
-            className="w-4 h-4 rounded text-slate-900 focus:ring-slate-900 border-slate-300"
+            className="mt-0.5 w-4 h-4 rounded-lg text-indigo-600 focus:ring-indigo-500 border-slate-300 dark:border-slate-600"
           />
+          <label htmlFor="requires-ack" className="text-xs cursor-pointer select-none">
+            <span className="font-bold text-slate-900 dark:text-white block">
+              Require Mandatory Parent Acknowledgment
+            </span>
+            <span className="text-[11px] text-slate-500 dark:text-slate-400 block mt-0.5">
+              Parents will see an acknowledgment warning and must click a digital receipt to confirm receipt.
+            </span>
+          </label>
         </div>
 
-        {/* Actions */}
-        <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
+        {/* Modal Actions */}
+        <div className="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
           <button
             type="button"
             onClick={onClose}
-            className="text-xs font-medium text-slate-500 hover:text-slate-800 px-4 py-2"
+            className="text-xs font-semibold text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 px-3 py-2"
           >
             Cancel
           </button>
@@ -200,7 +196,7 @@ export function PostNoticeModal({
             size="md"
             icon={isSuccess ? <CheckCircle2 className="w-4 h-4 text-emerald-400" /> : <Send className="w-4 h-4" />}
           >
-            {isSuccess ? "Published!" : "Post Notice"}
+            {isSuccess ? "Published Successfully!" : "Publish Notice"}
           </Button>
         </div>
       </form>

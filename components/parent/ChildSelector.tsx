@@ -36,8 +36,8 @@ export function ChildSelector({
               onClick={() => onSelectChild(child.id)}
               className={`flex items-center gap-3.5 p-3 rounded-2xl transition-all duration-200 shrink-0 text-left ${
                 isActive
-                  ? "bg-white shadow-[0_8px_24px_rgba(255,101,71,0.15)] ring-2 ring-[#FF6547] border-transparent"
-                  : "bg-white/80 hover:bg-white shadow-card border border-black/[0.04] opacity-80 hover:opacity-100"
+                  ? "bg-white dark:bg-[#111827] shadow-[0_8px_24px_rgba(255,101,71,0.15)] ring-2 ring-[#FF6547] border-transparent"
+                  : "bg-white/80 dark:bg-[#111827]/70 hover:bg-white dark:hover:bg-[#111827] shadow-card border border-black/[0.04] dark:border-white/10 opacity-80 hover:opacity-100"
               }`}
               style={{ minWidth: "220px" }}
             >
@@ -46,30 +46,30 @@ export function ChildSelector({
                   <img
                     src={child.photo_url}
                     alt={child.full_name}
-                    className="w-12 h-12 rounded-2xl object-cover border-2 border-white shadow-sm"
+                    className="w-12 h-12 rounded-2xl object-cover border-2 border-white dark:border-slate-800 shadow-sm"
                   />
                 ) : (
-                  <div className="w-12 h-12 rounded-2xl bg-orange-100 text-orange-600 flex items-center justify-center font-bold text-lg">
+                  <div className="w-12 h-12 rounded-2xl bg-orange-100 dark:bg-orange-950/60 text-orange-600 dark:text-orange-400 flex items-center justify-center font-bold text-lg">
                     {child.full_name.charAt(0)}
                   </div>
                 )}
                 {isActive && (
-                  <span className="absolute -bottom-1 -right-1 w-4 h-4 bg-[#FF6547] text-white rounded-full flex items-center justify-center text-[9px] font-bold ring-2 ring-white">
+                  <span className="absolute -bottom-1 -right-1 w-4 h-4 bg-[#FF6547] text-white rounded-full flex items-center justify-center text-[9px] font-bold ring-2 ring-white dark:ring-slate-900">
                     ✓
                   </span>
                 )}
               </div>
 
               <div className="min-w-0">
-                <div className="text-sm font-bold text-slate-900 truncate">
+                <div className="text-sm font-bold text-slate-900 dark:text-white truncate">
                   {child.full_name}
                 </div>
-                <div className="text-xs text-slate-500 font-medium mt-0.5 flex items-center gap-1.5">
-                  <span className="bg-slate-100 px-2 py-0.5 rounded-md text-[10px] font-semibold text-slate-700">
+                <div className="text-xs text-slate-500 dark:text-slate-400 font-medium mt-0.5 flex items-center gap-1.5">
+                  <span className="bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-md text-[10px] font-semibold text-slate-700 dark:text-slate-300">
                     Grade {child.class}-{child.section}
                   </span>
                 </div>
-                <div className="text-[10px] text-slate-400 font-mono mt-1">
+                <div className="text-[10px] text-slate-400 dark:text-slate-500 font-mono mt-1">
                   {child.student_id}
                 </div>
               </div>
@@ -77,6 +77,7 @@ export function ChildSelector({
           );
         })}
       </div>
+
     </div>
   );
 }

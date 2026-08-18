@@ -11,17 +11,21 @@ import { StudentInfoCard } from "@/components/parent/StudentInfoCard";
 import { BottomNav, NavTab } from "@/components/ui/BottomNav";
 import { Notice, AttendanceRecord } from "@/lib/types";
 import { Modal } from "@/components/ui/Modal";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
+import { GraduationCap, LogOut } from "lucide-react";
 
 export default function ParentDashboardPage() {
   const {
     user,
     isLoading,
+    school,
     getParentChildren,
     activeChild,
     activeChildId,
     setActiveChildId,
     getStudentAttendance,
     getRelevantNotices,
+    logout,
   } = useAuth();
   const router = useRouter();
 
@@ -54,10 +58,35 @@ export default function ParentDashboardPage() {
   const attendanceRate =
     totalRecords > 0 ? Math.round(((presentCount + lateCount * 0.8) / totalRecords) * 100) : 95;
 
-
   return (
-    <div className="min-h-screen bg-[#F6F7FB] pb-28 pt-4 sm:pt-6 px-4 sm:px-6">
-      <div className="max-w-2xl mx-auto space-y-6">
+    <div className="min-h-screen bg-[#F6F7FB] dark:bg-[#0B0F17] pb-28 pt-3 sm:pt-6 px-3.5 sm:px-6 transition-colors duration-200">
+      <div className="max-w-2xl mx-auto space-y-5 sm:space-y-6">
+        {/* Top Header Bar for Parents */}
+        <div className="flex items-center justify-between py-1">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-xl bg-orange-500 text-white flex items-center justify-center font-black text-xs shadow-xs">
+              M
+            </div>
+            <span className="font-extrabold text-xs text-slate-900 dark:text-white">
+              {school?.name || "Mo-School"}
+            </span>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <ThemeToggle size="sm" />
+            <button
+              onClick={() => {
+                logout();
+                router.push("/");
+              }}
+              className="p-2 rounded-xl text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors"
+              title="Sign Out"
+            >
+              <LogOut className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+
         {/* Sibling Switcher (if multiple children linked) */}
         <ChildSelector
           childrenList={childrenList}
@@ -79,7 +108,7 @@ export default function ParentDashboardPage() {
 
             {/* If Home tab, show preview of both Attendance and Notices */}
             {activeTab === "home" && (
-              <div className="space-y-6">
+              <div className="space-y-5 sm:space-y-6">
                 <AttendanceList
                   records={attendanceRecords}
                   studentName={selectedChild?.full_name || "Student"}
@@ -97,7 +126,7 @@ export default function ParentDashboardPage() {
 
             {/* If Profile tab, focus on Student Info */}
             {activeTab === "profile" && (
-              <div className="space-y-6">
+              <div className="space-y-5 sm:space-y-6">
                 <StudentInfoCard student={selectedChild} />
               </div>
             )}
@@ -106,19 +135,19 @@ export default function ParentDashboardPage() {
 
         {/* Tab 2: Attendance Focus */}
         {activeTab === "attendance" && (
-          <div className="space-y-6 animate-fade-in">
-            <div className="bg-white rounded-3xl p-5 shadow-card border border-black/[0.03] flex items-center justify-between">
+          <div className="space-y-5 sm:space-y-6 animate-fade-in">
+            <div className="bg-white dark:bg-[#111827] rounded-3xl p-5 shadow-card border border-black/[0.03] dark:border-white/10 flex items-center justify-between">
               <div>
-                <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">
+                <span className="text-[10px] text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider">
                   Attendance Overview
                 </span>
-                <h2 className="text-xl font-extrabold text-slate-900">
+                <h2 className="text-xl font-extrabold text-slate-900 dark:text-white">
                   {selectedChild?.full_name}
                 </h2>
               </div>
               <div className="text-right">
-                <div className="text-2xl font-black text-emerald-600">{attendanceRate}%</div>
-                <span className="text-[10px] text-slate-400 font-medium">Monthly Turnout</span>
+                <div className="text-2xl font-black text-emerald-600 dark:text-emerald-400">{attendanceRate}%</div>
+                <span className="text-[10px] text-slate-400 dark:text-slate-500 font-medium">Monthly Turnout</span>
               </div>
             </div>
 
@@ -131,7 +160,7 @@ export default function ParentDashboardPage() {
 
         {/* Tab 3: Notices Focus */}
         {activeTab === "notices" && (
-          <div className="space-y-6 animate-fade-in">
+          <div className="space-y-5 sm:space-y-6 animate-fade-in">
             <NoticesList
               notices={notices}
               studentName={selectedChild?.full_name}
@@ -139,7 +168,6 @@ export default function ParentDashboardPage() {
             />
           </div>
         )}
-
       </div>
 
       {/* Floating Bottom Nav */}
@@ -153,10 +181,10 @@ export default function ParentDashboardPage() {
         subtitle={modalNotice?.target_class ? `Class ${modalNotice.target_class}` : "School-Wide Announcement"}
       >
         <div className="space-y-4 pt-1 text-xs">
-          <p className="text-slate-700 leading-relaxed text-sm whitespace-pre-line bg-slate-50 p-4 rounded-2xl border border-slate-100">
+          <p className="text-slate-700 dark:text-slate-200 leading-relaxed text-sm whitespace-pre-line bg-slate-50 dark:bg-slate-800/80 p-4 rounded-2xl border border-slate-100 dark:border-slate-700">
             {modalNotice?.body}
           </p>
-          <div className="text-[11px] text-slate-400">
+          <div className="text-[11px] text-slate-400 dark:text-slate-500">
             Issued on: {modalNotice?.created_at ? new Date(modalNotice.created_at).toLocaleDateString() : ""}
           </div>
         </div>

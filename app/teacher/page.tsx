@@ -11,11 +11,14 @@ import { PostNoticeModal } from "@/components/teacher/PostNoticeModal";
 import { NoticesList } from "@/components/parent/NoticesList";
 import { BottomNav, NavTab } from "@/components/ui/BottomNav";
 import { Student } from "@/lib/types";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
+import { LogOut } from "lucide-react";
 
 export default function TeacherDashboardPage() {
   const {
     user,
     isLoading,
+    school,
     getTeacherAssignedClasses,
     getClassStudents,
     attendance,
@@ -24,6 +27,7 @@ export default function TeacherDashboardPage() {
     getRelevantNotices,
     guardians,
     guardianStudents,
+    logout,
   } = useAuth();
   const router = useRouter();
 
@@ -65,8 +69,34 @@ export default function TeacherDashboardPage() {
     : null;
 
   return (
-    <div className="min-h-screen bg-[#F6F7FB] pb-28 pt-4 sm:pt-6 px-4 sm:px-6">
-      <div className="max-w-2xl mx-auto space-y-6">
+    <div className="min-h-screen bg-[#F6F7FB] dark:bg-[#0B0F17] pb-28 pt-3 sm:pt-6 px-3.5 sm:px-6 transition-colors duration-200">
+      <div className="max-w-2xl mx-auto space-y-5 sm:space-y-6">
+        {/* Top Header Bar for Teachers */}
+        <div className="flex items-center justify-between py-1">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-black text-xs shadow-xs">
+              M
+            </div>
+            <span className="font-extrabold text-xs text-slate-900 dark:text-white">
+              {school?.name || "Mo-School"} • Faculty
+            </span>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <ThemeToggle size="sm" />
+            <button
+              onClick={() => {
+                logout();
+                router.push("/");
+              }}
+              className="p-2 rounded-xl text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors"
+              title="Sign Out"
+            >
+              <LogOut className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+
         {/* Tab 1: Home / Classes Roll Call */}
         {(activeTab === "home" || activeTab === "classes") && (
           <>
@@ -93,27 +123,20 @@ export default function TeacherDashboardPage() {
               onSaveAttendance={(records) => markAttendance(records)}
               onSelectStudent={(student) => setSelectedStudent(student)}
             />
-
-            {/* If on home, show notices preview */}
-            {activeTab === "home" && <NoticesList notices={notices} />}
           </>
         )}
 
         {/* Tab 2: Notices Focus */}
         {activeTab === "notices" && (
-          <div className="space-y-6 animate-fade-in">
-            <div className="flex justify-between items-center bg-white p-5 rounded-3xl shadow-card border border-black/[0.03]">
+          <div className="space-y-5 sm:space-y-6 animate-fade-in">
+            <div className="flex items-center justify-between">
               <div>
-                <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">
-                  Teacher Notice Board
-                </span>
-                <h2 className="text-lg font-bold text-slate-900">
-                  Class & Campus Announcements
-                </h2>
+                <h3 className="text-lg font-bold text-slate-900 dark:text-white">Announcements</h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400">Classroom notices and school circulars</p>
               </div>
               <button
                 onClick={() => setIsPostNoticeOpen(true)}
-                className="bg-[#111827] text-white px-4 py-2 rounded-2xl text-xs font-bold shadow-sm hover:bg-black"
+                className="px-4 py-2 bg-[#111827] dark:bg-slate-100 text-white dark:text-slate-900 rounded-2xl text-xs font-bold shadow-sm"
               >
                 + Post Notice
               </button>
@@ -123,36 +146,51 @@ export default function TeacherDashboardPage() {
           </div>
         )}
 
-        {/* Tab 3: Profile */}
+        {/* Tab 3: Profile Focus */}
         {activeTab === "profile" && (
-          <div className="bg-white rounded-3xl p-6 shadow-card border border-black/[0.03] space-y-4 animate-fade-in">
-            <div className="flex items-center gap-4 pb-4 border-b border-slate-100">
-              <div className="w-14 h-14 rounded-2xl bg-[#4F46E5] text-white flex items-center justify-center font-bold text-xl">
+          <div className="bg-white dark:bg-[#111827] rounded-3xl p-6 shadow-card border border-black/[0.03] dark:border-white/10 space-y-4 animate-fade-in transition-colors">
+            <div className="flex items-center gap-4">
+              <div className="w-14 h-14 rounded-2xl bg-indigo-50 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 flex items-center justify-center font-black text-xl">
                 {user.full_name.charAt(0)}
               </div>
               <div>
-                <h3 className="text-lg font-extrabold text-slate-900">{user.full_name}</h3>
-                <p className="text-xs text-slate-500">{user.email}</p>
-                <div className="mt-1 flex gap-1.5">
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-700">
-                    Faculty ID: TCH-2026-08
-                  </span>
-                </div>
+                <h3 className="text-lg font-extrabold text-slate-900 dark:text-white">{user.full_name}</h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400">{user.email}</p>
+                <span className="inline-block mt-1 bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 font-bold px-2 py-0.5 rounded-full text-[10px]">
+                  Faculty Member
+                </span>
               </div>
             </div>
 
-            <div className="space-y-2 text-xs">
-              <div className="p-3 bg-slate-50 rounded-2xl border border-slate-100 flex justify-between">
-                <span className="text-slate-400 font-medium">Assigned Classes:</span>
-                <span className="font-bold text-slate-800">
-                  {assignedClasses.map((a) => `${a.class}-${a.section}`).join(", ")}
-                </span>
+            <div className="pt-3 border-t border-slate-100 dark:border-slate-800 space-y-2 text-xs">
+              <div className="text-slate-400 dark:text-slate-500 uppercase font-semibold text-[10px]">
+                Teaching Subjects
               </div>
-              <div className="p-3 bg-slate-50 rounded-2xl border border-slate-100 flex justify-between">
-                <span className="text-slate-400 font-medium">Subjects Taught:</span>
-                <span className="font-bold text-slate-800">
-                  {user.teacherProfile?.subjects.join(", ") || "General Science"}
-                </span>
+              <div className="flex flex-wrap gap-1.5">
+                {(user.teacherProfile?.subjects || ["Science", "General"]).map((sub) => (
+                  <span
+                    key={sub}
+                    className="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-medium px-2.5 py-1 rounded-xl"
+                  >
+                    {sub}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <div className="pt-3 border-t border-slate-100 dark:border-slate-800 space-y-2 text-xs">
+              <div className="text-slate-400 dark:text-slate-500 uppercase font-semibold text-[10px]">
+                Assigned Classes & Sections
+              </div>
+              <div className="flex flex-wrap gap-1.5">
+                {assignedClasses.map((ac, idx) => (
+                  <span
+                    key={idx}
+                    className="bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 font-mono font-bold px-2.5 py-1 rounded-xl"
+                  >
+                    Grade {ac.class}-{ac.section}
+                  </span>
+                ))}
               </div>
             </div>
           </div>
@@ -162,19 +200,19 @@ export default function TeacherDashboardPage() {
       {/* Floating Bottom Nav */}
       <BottomNav activeTab={activeTab} onChangeTab={setActiveTab} role="teacher" />
 
-      {/* Student Details & Guardian Contact Drawer */}
+      {/* Student Details Drawer */}
       <StudentDetailDrawer
-        student={selectedStudent}
+        isOpen={!!selectedStudent}
         onClose={() => setSelectedStudent(null)}
+        student={selectedStudent}
         guardian={selectedStudentGuardian}
-        guardianRelationship={selectedStudentGuardianLink?.relationship}
       />
 
       {/* Post Notice Modal */}
       <PostNoticeModal
         isOpen={isPostNoticeOpen}
         onClose={() => setIsPostNoticeOpen(false)}
-        onSubmit={(noticeData) => postNotice(noticeData)}
+        onSubmit={(notice) => postNotice(notice)}
         availableClasses={assignedClasses}
         isTeacher={true}
       />

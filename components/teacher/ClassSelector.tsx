@@ -15,34 +15,27 @@ export function ClassSelector({
   onSelectClass,
 }: ClassSelectorProps) {
   return (
-    <div className="mb-6">
-      <div className="flex items-center justify-between mb-3 px-1">
-        <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
-          <Users className="w-3.5 h-3.5 text-indigo-600" />
-          My Assigned Classes
-        </h3>
-        <span className="text-[11px] text-slate-400">Select class to manage</span>
-      </div>
-
-      <div className="flex gap-2.5 overflow-x-auto pb-1 no-scrollbar">
-        {assignedClasses.map((item) => {
-          const isSelected =
-            selectedClass.class === item.class && selectedClass.section === item.section;
-          return (
-            <button
-              key={`${item.class}-${item.section}`}
-              onClick={() => onSelectClass(item)}
-              className={`px-5 py-2.5 rounded-full font-bold text-xs transition-all duration-200 shrink-0 ${
-                isSelected
-                  ? "bg-[#111827] text-white shadow-md ring-2 ring-[#111827]/20"
-                  : "bg-white text-slate-700 hover:bg-slate-50 shadow-card border border-black/[0.04]"
-              }`}
-            >
-              Grade {item.class}-{item.section}
-            </button>
-          );
-        })}
-      </div>
+    <div className="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar">
+      <span className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 mr-1 shrink-0">
+        Class:
+      </span>
+      {assignedClasses.map((c) => {
+        const isSelected =
+          c.class === selectedClass.class && c.section === selectedClass.section;
+        return (
+          <button
+            key={`${c.class}-${c.section}`}
+            onClick={() => onSelectClass(c)}
+            className={`px-4 py-2 rounded-2xl text-xs font-bold transition-all duration-200 shrink-0 ${
+              isSelected
+                ? "bg-[#111827] dark:bg-slate-100 text-white dark:text-slate-900 shadow-md scale-[1.02]"
+                : "bg-white dark:bg-[#111827] text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 shadow-2xs"
+            }`}
+          >
+            Grade {c.class} — {c.section}
+          </button>
+        );
+      })}
     </div>
   );
 }
