@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { Student } from "@/lib/types";
-import { Search, Plus, UserPlus, Filter, Hash, MapPin, Calendar, CheckCircle2 } from "lucide-react";
+import { Search, Plus, UserPlus, Filter, Hash, MapPin, Calendar, CheckCircle2, User } from "lucide-react";
 import { Button } from "../ui/Button";
 import { Modal } from "../ui/Modal";
 
@@ -88,7 +88,7 @@ export function StudentManager({ students, onAddStudent }: StudentManagerProps) 
   };
 
   return (
-    <div className="bg-white rounded-3xl p-5 sm:p-6 shadow-card border border-black/[0.03] space-y-5">
+    <div className="bg-white rounded-3xl p-4 sm:p-6 shadow-card border border-black/[0.03] space-y-4 sm:space-y-5">
       {/* Header with Search and Add Student Button */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
         <div>
@@ -101,31 +101,31 @@ export function StudentManager({ students, onAddStudent }: StudentManagerProps) 
           variant="primary"
           size="md"
           icon={<UserPlus className="w-4 h-4" />}
-          className="self-start sm:self-auto"
+          className="w-full sm:w-auto justify-center shadow-sm"
         >
           Add Student
         </Button>
       </div>
 
       {/* Filter and Search Bar */}
-      <div className="flex flex-col sm:flex-row gap-3">
+      <div className="flex flex-col sm:flex-row gap-2.5 sm:gap-3">
         <div className="relative flex-1">
           <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search by student name, ID or admission number..."
+            placeholder="Search student name, ID or admission no..."
             className="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-slate-50 border border-slate-200 text-xs text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-900/10"
           />
         </div>
 
         <div className="flex items-center gap-2">
-          <Filter className="w-4 h-4 text-slate-400 shrink-0" />
+          <Filter className="w-4 h-4 text-slate-400 shrink-0 hidden sm:block" />
           <select
             value={classFilter}
             onChange={(e) => setClassFilter(e.target.value)}
-            className="px-3 py-2.5 rounded-2xl bg-slate-50 border border-slate-200 text-xs font-bold text-slate-800 focus:outline-none"
+            className="w-full sm:w-auto px-3.5 py-2.5 rounded-2xl bg-slate-50 border border-slate-200 text-xs font-bold text-slate-800 focus:outline-none"
           >
             <option value="all">All Classes</option>
             <option value="10">Grade 10</option>
@@ -136,8 +136,54 @@ export function StudentManager({ students, onAddStudent }: StudentManagerProps) 
         </div>
       </div>
 
-      {/* Students Table / List */}
-      <div className="overflow-x-auto">
+      {/* MOBILE VIEW: Touch-Friendly Card List (visible on small screens) */}
+      <div className="block md:hidden space-y-2.5">
+        {filteredStudents.length === 0 ? (
+          <div className="py-8 text-center text-slate-400 text-xs">
+            No students found matching your search.
+          </div>
+        ) : (
+          filteredStudents.map((s) => (
+            <div
+              key={s.id}
+              className="p-3.5 rounded-2xl bg-slate-50/70 border border-slate-200/70 space-y-2"
+            >
+              <div className="flex items-start justify-between gap-2">
+                <div className="flex items-center gap-2.5 min-w-0">
+                  <img
+                    src={s.photo_url || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100"}
+                    alt={s.full_name}
+                    className="w-10 h-10 rounded-2xl object-cover border border-black/5 shrink-0"
+                  />
+                  <div className="min-w-0">
+                    <h4 className="font-bold text-xs text-slate-900 truncate">{s.full_name}</h4>
+                    <span className="text-[11px] font-mono text-slate-500 font-semibold block">
+                      {s.student_id}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="flex flex-col items-end gap-1 shrink-0">
+                  <span className="bg-slate-900 text-white font-bold px-2 py-0.5 rounded-lg text-[10px]">
+                    {s.class}-{s.section}
+                  </span>
+                  <span className="bg-emerald-50 text-emerald-700 font-bold px-2 py-0.5 rounded-full text-[9px] border border-emerald-200/60">
+                    Active
+                  </span>
+                </div>
+              </div>
+
+              <div className="pt-2 border-t border-slate-200/50 flex items-center justify-between text-[10px] text-slate-400">
+                <span className="font-mono">Adm: {s.admission_number}</span>
+                <span>DOB: {s.date_of_birth}</span>
+              </div>
+            </div>
+          ))
+        )}
+      </div>
+
+      {/* DESKTOP VIEW: Clean Table (visible on md+ screens) */}
+      <div className="hidden md:block overflow-x-auto">
         <table className="w-full text-left text-xs">
           <thead>
             <tr className="border-b border-slate-100 text-slate-400 uppercase font-semibold text-[10px] tracking-wider">
@@ -157,7 +203,7 @@ export function StudentManager({ students, onAddStudent }: StudentManagerProps) 
                     <img
                       src={s.photo_url || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100"}
                       alt={s.full_name}
-                      className="w-9 h-9 rounded-2xl object-cover border border-black/5"
+                      className="w-9 h-9 rounded-2xl object-cover border border-black/5 shrink-0"
                     />
                     <div>
                       <div className="font-bold text-slate-900">{s.full_name}</div>
@@ -219,7 +265,7 @@ export function StudentManager({ students, onAddStudent }: StudentManagerProps) 
             />
           </div>
 
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-3 gap-2 sm:gap-3">
             <div>
               <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">
                 Class *
@@ -253,7 +299,7 @@ export function StudentManager({ students, onAddStudent }: StudentManagerProps) 
 
             <div>
               <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">
-                Roll Sequence *
+                Roll Seq *
               </label>
               <input
                 type="text"
@@ -265,7 +311,7 @@ export function StudentManager({ students, onAddStudent }: StudentManagerProps) 
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
               <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">
                 Permanent Admission No *
@@ -312,7 +358,7 @@ export function StudentManager({ students, onAddStudent }: StudentManagerProps) 
             <h5 className="text-xs font-bold uppercase tracking-wider text-slate-600 mb-2">
               Guardian Linkage (Optional)
             </h5>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
               <input
                 type="text"
                 value={guardianName}
@@ -334,7 +380,7 @@ export function StudentManager({ students, onAddStudent }: StudentManagerProps) 
             <button
               type="button"
               onClick={() => setIsAddModalOpen(false)}
-              className="text-xs font-medium text-slate-500 hover:text-slate-800"
+              className="text-xs font-medium text-slate-500 hover:text-slate-800 px-3 py-2"
             >
               Cancel
             </button>

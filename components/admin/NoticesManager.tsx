@@ -57,7 +57,7 @@ export function NoticesManager({
     : null;
 
   return (
-    <div className="bg-white rounded-3xl p-5 sm:p-6 shadow-card border border-black/[0.03] space-y-5">
+    <div className="bg-white rounded-3xl p-4 sm:p-6 shadow-card border border-black/[0.03] space-y-4 sm:space-y-5">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
         <div>
@@ -70,7 +70,7 @@ export function NoticesManager({
           variant="primary"
           size="md"
           icon={<Plus className="w-4 h-4" />}
-          className="self-start sm:self-auto"
+          className="w-full sm:w-auto justify-center shadow-sm"
         >
           New Notice
         </Button>
@@ -88,7 +88,7 @@ export function NoticesManager({
               className="p-4 rounded-2xl border border-slate-100 bg-slate-50/50 hover:bg-slate-50 transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3"
             >
               <div className="flex-1 min-w-0">
-                <div className="flex flex-wrap items-center gap-2 mb-1">
+                <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 mb-1.5">
                   <span
                     className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full ${
                       notice.target_class
@@ -130,7 +130,7 @@ export function NoticesManager({
                 </div>
               </div>
 
-              <div className="flex items-center gap-2 self-end sm:self-center">
+              <div className="flex items-center gap-2 pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-200/60 justify-between sm:justify-end">
                 {requiresAck && (
                   <button
                     onClick={() => setSelectedAuditNotice(notice)}
@@ -185,7 +185,7 @@ export function NoticesManager({
                 <span className="text-[10px] text-slate-400 uppercase font-bold tracking-wider">
                   Receipt Compliance Rate
                 </span>
-                <div className="text-xl font-black">{auditStats.percentage}% Acknowledged</div>
+                <div className="text-lg sm:text-xl font-black">{auditStats.percentage}% Acknowledged</div>
               </div>
               <div className="text-right">
                 <span className="text-xs font-bold text-emerald-400">
@@ -243,7 +243,7 @@ export function NoticesManager({
             <div className="flex justify-end pt-3 border-t border-slate-100">
               <button
                 onClick={() => setSelectedAuditNotice(null)}
-                className="px-5 py-2.5 bg-[#111827] text-white rounded-2xl text-xs font-semibold hover:bg-black"
+                className="w-full sm:w-auto px-5 py-2.5 bg-[#111827] text-white rounded-2xl text-xs font-semibold hover:bg-black"
               >
                 Close Audit
               </button>

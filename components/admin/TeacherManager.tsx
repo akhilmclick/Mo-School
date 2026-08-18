@@ -57,7 +57,7 @@ export function TeacherManager({ teachers, assignments, onAddTeacher }: TeacherM
   };
 
   return (
-    <div className="bg-white rounded-3xl p-5 sm:p-6 shadow-card border border-black/[0.03] space-y-5">
+    <div className="bg-white rounded-3xl p-4 sm:p-6 shadow-card border border-black/[0.03] space-y-4 sm:space-y-5">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
         <div>
@@ -70,42 +70,42 @@ export function TeacherManager({ teachers, assignments, onAddTeacher }: TeacherM
           variant="primary"
           size="md"
           icon={<UserPlus className="w-4 h-4" />}
-          className="self-start sm:self-auto"
+          className="w-full sm:w-auto justify-center shadow-sm"
         >
           Add Teacher
         </Button>
       </div>
 
       {/* Teachers List */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
         {teachers.map((teacher) => {
           const teacherAssigned = assignments.filter((a) => a.teacher_id === teacher.id);
           return (
             <div
               key={teacher.id}
-              className="p-4 rounded-2xl border border-slate-100 bg-slate-50/50 hover:bg-slate-50 transition-all space-y-3"
+              className="p-4 rounded-2xl border border-slate-100 bg-slate-50/60 hover:bg-slate-50 transition-all space-y-3"
             >
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-2xl bg-[#4F46E5]/10 text-[#4F46E5] flex items-center justify-center font-bold text-sm">
+              <div className="flex items-start justify-between gap-2">
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className="w-10 h-10 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold text-sm shrink-0 border border-indigo-100">
                     {teacher.full_name.charAt(0)}
                   </div>
-                  <div>
-                    <h4 className="text-sm font-bold text-slate-900">{teacher.full_name}</h4>
-                    <span className="text-[11px] text-slate-500">{teacher.email}</span>
+                  <div className="min-w-0">
+                    <h4 className="text-sm font-bold text-slate-900 truncate">{teacher.full_name}</h4>
+                    <span className="text-[11px] text-slate-500 truncate block">{teacher.email}</span>
                   </div>
                 </div>
-                <span className="text-[10px] font-bold text-indigo-700 bg-indigo-50 px-2.5 py-0.5 rounded-full border border-indigo-200/60">
+                <span className="text-[10px] font-bold text-indigo-700 bg-indigo-50 px-2.5 py-0.5 rounded-full border border-indigo-200/60 shrink-0">
                   {teacherAssigned.length} Classes
                 </span>
               </div>
 
               {/* Subjects */}
-              <div className="flex flex-wrap gap-1.5 pt-1">
+              <div className="flex flex-wrap gap-1.5 pt-0.5">
                 {teacher.subjects.map((sub) => (
                   <span
                     key={sub}
-                    className="bg-white text-slate-700 border border-slate-200 text-[10px] font-medium px-2 py-0.5 rounded-md"
+                    className="bg-white text-slate-700 border border-slate-200 text-[10px] font-semibold px-2 py-0.5 rounded-lg"
                   >
                     {sub}
                   </span>
@@ -113,9 +113,9 @@ export function TeacherManager({ teachers, assignments, onAddTeacher }: TeacherM
               </div>
 
               {/* Assigned Classes */}
-              <div className="pt-2 border-t border-slate-200/60 flex items-center justify-between text-xs">
+              <div className="pt-2.5 border-t border-slate-200/60 flex items-center justify-between text-xs">
                 <span className="text-slate-400 text-[11px] font-medium">Assigned:</span>
-                <div className="flex gap-1.5">
+                <div className="flex flex-wrap gap-1.5 justify-end">
                   {teacherAssigned.map((a, idx) => (
                     <span
                       key={idx}
@@ -153,7 +153,7 @@ export function TeacherManager({ teachers, assignments, onAddTeacher }: TeacherM
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
               <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">
                 Email Address *
@@ -234,7 +234,7 @@ export function TeacherManager({ teachers, assignments, onAddTeacher }: TeacherM
             <button
               type="button"
               onClick={() => setIsAddModalOpen(false)}
-              className="text-xs font-medium text-slate-500 hover:text-slate-800"
+              className="text-xs font-medium text-slate-500 hover:text-slate-800 px-3 py-2"
             >
               Cancel
             </button>
