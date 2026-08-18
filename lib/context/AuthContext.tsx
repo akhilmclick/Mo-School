@@ -12,6 +12,9 @@ import {
   AttendanceRecord,
   Notice,
   NoticeAcknowledgment,
+  SchoolProfile,
+  GradeConfig,
+  OnboardingData,
   AttendanceStatus,
 } from "../types";
 
@@ -24,6 +27,8 @@ import {
   MOCK_ATTENDANCE,
   MOCK_NOTICES,
   MOCK_NOTICE_ACKNOWLEDGMENTS,
+  DEFAULT_SCHOOL_PROFILE,
+  DEFAULT_SCHOOL_GRADES,
   DEMO_ACCOUNTS,
 } from "../data/mockData";
 
@@ -42,6 +47,12 @@ interface AuthContextType {
   logout: () => void;
   switchRole: (newRole: Role) => void;
 
+  // School Profile & Multi-tenant State
+  school: SchoolProfile;
+  schoolGrades: GradeConfig[];
+  updateSchoolProfile: (updates: Partial<SchoolProfile>) => void;
+  completeOnboarding: (data: OnboardingData) => Promise<{ success: boolean; redirectUrl: string }>;
+
   // Data Store
   students: Student[];
   guardians: Guardian[];
@@ -51,6 +62,7 @@ interface AuthContextType {
   attendance: AttendanceRecord[];
   notices: Notice[];
   noticeAcknowledgments: NoticeAcknowledgment[];
+
 
   // Active Context for Multi-child Parent
   activeChildId: string | null;
@@ -100,6 +112,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
+  // School Profile & Multi-tenant State
+  const [school, setSchool] = useState<SchoolProfile>(DEFAULT_SCHOOL_PROFILE);
+  const [schoolGrades, setSchoolGrades] = useState<GradeConfig[]>(DEFAULT_SCHOOL_GRADES);
+
   // Core App State (in-memory persistent across tabs via localStorage)
   const [students, setStudents] = useState<Student[]>(MOCK_STUDENTS);
   const [guardians, setGuardians] = useState<Guardian[]>(MOCK_GUARDIANS);
@@ -112,9 +128,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const [activeChildId, setActiveChildId] = useState<string | null>(null);
 
-  // Initialize session from localStorage on mount
+  // Initialize session and school from localStorage on mount
   useEffect(() => {
     try {
+      const savedSchool = localStorage.getItem("school_saas_profile");
+      const savedGrades = localStorage.getItem("school_saas_grades");
+      if (savedSchool) {
+        setSchool(JSON.parse(savedSchool));
+      }
+      if (savedGrades) {
+        setSchoolGrades(JSON.parse(savedGrades));
+      }
+
       const savedUser = localStorage.getItem("school_saas_user");
       const savedChildId = localStorage.getItem("school_saas_active_child");
       const savedAcks = localStorage.getItem("school_saas_acks");
@@ -139,6 +164,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setIsLoading(false);
     }
   }, []);
+
+  // Save school profile to localStorage
+  useEffect(() => {
+    try {
+      localStorage.setItem("school_saas_profile", JSON.stringify(school));
+      localStorage.setItem("school_saas_grades", JSON.stringify(schoolGrades));
+    } catch (e) {
+      console.error("Error saving school profile:", e);
+    }
+  }, [school, schoolGrades]);
+
 
   // Save acknowledgments to localStorage
   useEffect(() => {
@@ -251,7 +287,65 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const updateSchoolProfile = (updates: Partial<SchoolProfile>) => {
+    setSchool((prev) => ({ ...prev, ...updates }));
+  };
+
+  const completeOnboarding = async (data: OnboardingData): Promise<{ success: boolean; redirectUrl: string }> => {
+    const slug = data.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+    const newSchoolId = `sch-${Date.now()}`;
+    const newAdminId = `adm-${Date.now()}`;
+
+    const newSchool: SchoolProfile = {
+      id: newSchoolId,
+      name: data.name,
+      slug,
+      code: data.code.toUpperCase(),
+      email: data.email,
+      phone: data.phone,
+      address: data.address,
+      website: data.website,
+      motto: data.motto,
+      logo_url: data.logo_url || "https://images.unsplash.com/photo-1594608661623-aa0bd3a69d98?w=150&auto=format&fit=crop&q=80",
+      academic_year: data.academic_year,
+      current_term: data.current_term || "Term 1",
+      term_system: data.term_system,
+      attendance_days: data.attendance_days,
+      student_id_format: data.student_id_format,
+      admission_prefix: data.admission_prefix,
+      admission_start_seq: data.admission_start_seq,
+      admin_name: data.admin_name,
+      admin_email: data.admin_email,
+      admin_title: data.admin_title || "Principal",
+      onboarding_completed: true,
+      created_at: new Date().toISOString(),
+    };
+
+    const newAdminUser: AuthUser = {
+      id: newAdminId,
+      email: data.admin_email,
+      full_name: data.admin_name,
+      roles: ["admin"],
+      activeRole: "admin",
+      schoolId: newSchoolId,
+    };
+
+    setSchool(newSchool);
+    setSchoolGrades(data.grades);
+    setUser(newAdminUser);
+
+    localStorage.setItem("school_saas_profile", JSON.stringify(newSchool));
+    localStorage.setItem("school_saas_grades", JSON.stringify(data.grades));
+    localStorage.setItem("school_saas_user", JSON.stringify(newAdminUser));
+
+    return {
+      success: true,
+      redirectUrl: "/admin",
+    };
+  };
+
   const loginAsDemo = async (email: string): Promise<LoginResult> => {
+
     return login(email);
   };
 
@@ -562,9 +656,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         loginAsDemo,
         logout,
         switchRole,
+        school,
+        schoolGrades,
+        updateSchoolProfile,
+        completeOnboarding,
         students,
         guardians,
         guardianStudents,
+
         teachers,
         teacherAssignments,
         attendance,

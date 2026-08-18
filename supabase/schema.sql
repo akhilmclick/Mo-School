@@ -5,9 +5,53 @@
 -- Enable UUID extension
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
+-- 0. SCHOOLS TABLE (MULTI-TENANT ROOTS & ONBOARDING PROFILES)
+CREATE TABLE IF NOT EXISTS public.schools (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    name TEXT NOT NULL,
+    slug TEXT UNIQUE NOT NULL, -- e.g. "beacon-crest"
+    code TEXT UNIQUE NOT NULL, -- e.g. "BCA-2026"
+    email TEXT NOT NULL,
+    phone TEXT,
+    address TEXT,
+    website TEXT,
+    logo_url TEXT,
+    motto TEXT,
+    academic_year TEXT NOT NULL DEFAULT '2026-2027',
+    current_term TEXT NOT NULL DEFAULT 'Term 1',
+    term_system TEXT NOT NULL DEFAULT 'terms' CHECK (term_system IN ('terms', 'semesters', 'quarters')),
+    attendance_days TEXT[] DEFAULT ARRAY['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+    student_id_format TEXT NOT NULL DEFAULT '{YEAR}-{CLASS}{SECTION}-{SEQ}',
+    admission_prefix TEXT NOT NULL DEFAULT 'ADM',
+    admission_start_seq INT NOT NULL DEFAULT 1,
+    admin_name TEXT,
+    admin_email TEXT,
+    admin_title TEXT DEFAULT 'Principal',
+    onboarding_completed BOOLEAN NOT NULL DEFAULT false,
+    created_at TIMESTAMPTZ DEFAULT NOW() NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_schools_code ON public.schools(code);
+CREATE INDEX IF NOT EXISTS idx_schools_slug ON public.schools(slug);
+
+-- 0.1 SCHOOL_GRADES TABLE (CLASS & SECTION TOPOLOGY)
+CREATE TABLE IF NOT EXISTS public.school_grades (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    school_id UUID REFERENCES public.schools(id) ON DELETE CASCADE,
+    name TEXT NOT NULL, -- e.g. 'Grade 10'
+    code TEXT NOT NULL, -- e.g. '10'
+    level_order INT NOT NULL,
+    sections TEXT[] NOT NULL DEFAULT ARRAY['A', 'B'],
+    capacity_per_section INT DEFAULT 35,
+    created_at TIMESTAMPTZ DEFAULT NOW() NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_school_grades_school ON public.school_grades(school_id);
+
 -- 1. STUDENTS TABLE
 CREATE TABLE IF NOT EXISTS public.students (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    school_id UUID REFERENCES public.schools(id) ON DELETE SET NULL,
     student_id TEXT UNIQUE NOT NULL, -- e.g. "2026-10A-014"
     full_name TEXT NOT NULL,
     date_of_birth DATE,
@@ -18,6 +62,7 @@ CREATE TABLE IF NOT EXISTS public.students (
     photo_url TEXT,
     created_at TIMESTAMPTZ DEFAULT NOW() NOT NULL
 );
+
 
 CREATE INDEX IF NOT EXISTS idx_students_class_section ON public.students(class, section);
 CREATE INDEX IF NOT EXISTS idx_students_student_id ON public.students(student_id);
@@ -168,6 +213,8 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
 -- ==============================================================================
 
 -- Enable RLS on all tables
+ALTER TABLE public.schools ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.school_grades ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.students ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.guardians ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.guardian_student ENABLE ROW LEVEL SECURITY;
@@ -177,6 +224,26 @@ ALTER TABLE public.user_roles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.attendance ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.notices ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.notice_acknowledgments ENABLE ROW LEVEL SECURITY;
+
+-- ------------------------------------------------------------------------------
+-- 0. SCHOOLS & GRADES POLICIES
+-- ------------------------------------------------------------------------------
+CREATE POLICY "Public can view school identity"
+    ON public.schools FOR SELECT
+    USING (true);
+
+CREATE POLICY "Admin full manage schools"
+    ON public.schools FOR ALL
+    USING (public.is_admin() OR auth.uid() IS NOT NULL);
+
+CREATE POLICY "Public view school grades"
+    ON public.school_grades FOR SELECT
+    USING (true);
+
+CREATE POLICY "Admin full manage school grades"
+    ON public.school_grades FOR ALL
+    USING (public.is_admin() OR auth.uid() IS NOT NULL);
+
 
 
 -- ------------------------------------------------------------------------------

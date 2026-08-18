@@ -1,11 +1,13 @@
 "use client";
 
 import React, { useState } from "react";
+import Link from "next/link";
 import { useAuth } from "@/lib/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/Button";
 import { DEMO_ACCOUNTS } from "@/lib/data/mockData";
-import { Lock, Mail, GraduationCap, ArrowRight, Sparkles, Shield, User } from "lucide-react";
+import { Lock, Mail, GraduationCap, ArrowRight, Sparkles, Shield, User, Building } from "lucide-react";
+
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -138,31 +140,29 @@ export default function LoginPage() {
                   key={acc.email}
                   type="button"
                   onClick={() => handleQuickDemoSelect(acc.email)}
-                  className="w-full text-left p-2.5 rounded-2xl bg-slate-50/70 hover:bg-slate-100/90 border border-slate-100 hover:border-slate-200 transition-all flex items-center justify-between gap-2 group"
+                  className="w-full text-left p-3 rounded-2xl border border-slate-100 bg-slate-50/50 hover:bg-slate-100 hover:border-slate-300 transition-all flex items-center justify-between group"
                 >
-                  <div className="flex items-center gap-2.5 min-w-0">
+                  <div className="flex items-center gap-3">
                     <img
                       src={acc.avatar}
                       alt={acc.name}
                       className="w-8 h-8 rounded-full object-cover border border-black/5 shrink-0"
                     />
-                    <div className="min-w-0">
-                      <div className="text-xs font-bold text-slate-900 truncate group-hover:text-black">
+                    <div>
+                      <div className="text-xs font-bold text-slate-900 group-hover:text-orange-600 transition-colors">
                         {acc.name}
                       </div>
-                      <div className="text-[10px] text-slate-400 truncate">{acc.description}</div>
+                      <div className="text-[10px] text-slate-400">{acc.description}</div>
                     </div>
                   </div>
 
                   <span
-                    className={`text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0 ${
+                    className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full ${
                       acc.roles.includes("admin")
                         ? "bg-slate-900 text-white"
-                        : acc.roles.includes("teacher") && acc.roles.includes("parent")
-                        ? "bg-purple-100 text-purple-700"
                         : acc.roles.includes("teacher")
-                        ? "bg-indigo-100 text-indigo-700"
-                        : "bg-orange-100 text-orange-700"
+                        ? "bg-indigo-50 text-indigo-700 border border-indigo-200"
+                        : "bg-orange-50 text-orange-700 border border-orange-200"
                     }`}
                   >
                     {acc.badge.split(" ")[0]}
@@ -171,12 +171,23 @@ export default function LoginPage() {
               ))}
             </div>
           </div>
+
+          {/* Onboarding New School Entry Link */}
+          <div className="mt-6 pt-5 border-t border-slate-100 text-center">
+            <Link
+              href="/onboarding"
+              className="inline-flex items-center gap-2 text-xs font-bold text-slate-700 hover:text-orange-600 transition-colors bg-slate-50 hover:bg-orange-50 border border-slate-200/80 hover:border-orange-200/80 px-4 py-2.5 rounded-2xl shadow-2xs"
+            >
+              <Building className="w-4 h-4 text-orange-500" />
+              <span>Setting up a new school? <strong>Start Onboarding →</strong></span>
+            </Link>
+          </div>
         </div>
 
-        {/* Footer info */}
-        <div className="text-center mt-6 text-xs text-slate-400">
-          Phase 1 MVP • Built for 1,400–2,000 Student Campuses
-        </div>
+        {/* Footer */}
+        <p className="text-center text-xs text-slate-400 mt-6">
+          Phase 1 Prototype • Next.js + Supabase + Tailwind CSS
+        </p>
       </div>
     </div>
   );

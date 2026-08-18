@@ -1,4 +1,85 @@
-import { Student, Guardian, Teacher, TeacherClassAssignment, GuardianStudent, AttendanceRecord, Notice, NoticeAcknowledgment } from "../types";
+import {
+  Student,
+  Guardian,
+  Teacher,
+  TeacherClassAssignment,
+  GuardianStudent,
+  AttendanceRecord,
+  Notice,
+  NoticeAcknowledgment,
+  SchoolProfile,
+  GradeConfig,
+} from "../types";
+
+export const DEFAULT_SCHOOL_PROFILE: SchoolProfile = {
+  id: "sch-001",
+  name: "Beacon Crest Academy",
+  slug: "beacon-crest",
+  code: "BCA-2026",
+  email: "admin@beaconcrest.edu",
+  phone: "+1 (555) 342-9000",
+  address: "1000 Beacon Way, Springfield, IL 62701",
+  website: "https://beaconcrest.edu",
+  logo_url: "https://images.unsplash.com/photo-1594608661623-aa0bd3a69d98?w=150&auto=format&fit=crop&q=80",
+  motto: "Knowledge, Character, and Innovation for Tomorrow's Leaders",
+  academic_year: "2026-2027",
+  current_term: "Term 2",
+  term_system: "terms",
+  attendance_days: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+  student_id_format: "{YEAR}-{CLASS}{SECTION}-{SEQ}",
+  admission_prefix: "ADM",
+  admission_start_seq: 1,
+  admin_name: "Principal Marcus Sterling",
+  admin_email: "admin@school.com",
+  admin_title: "Head of School",
+  onboarding_completed: true,
+  created_at: "2026-08-01T00:00:00Z",
+};
+
+export const DEFAULT_SCHOOL_GRADES: GradeConfig[] = [
+  { name: "Grade 7", code: "7", level_order: 7, sections: ["A", "B"], capacity_per_section: 35 },
+  { name: "Grade 8", code: "8", level_order: 8, sections: ["A", "B"], capacity_per_section: 35 },
+  { name: "Grade 9", code: "9", level_order: 9, sections: ["A", "B", "C"], capacity_per_section: 35 },
+  { name: "Grade 10", code: "10", level_order: 10, sections: ["A", "B", "C"], capacity_per_section: 35 },
+  { name: "Grade 11", code: "11", level_order: 11, sections: ["A", "B"], capacity_per_section: 30 },
+  { name: "Grade 12", code: "12", level_order: 12, sections: ["A", "B"], capacity_per_section: 30 },
+];
+
+export const PRESET_K12: GradeConfig[] = [
+  { name: "Kindergarten", code: "KG", level_order: 0, sections: ["A", "B"], capacity_per_section: 25 },
+  { name: "Grade 1", code: "1", level_order: 1, sections: ["A", "B"], capacity_per_section: 30 },
+  { name: "Grade 2", code: "2", level_order: 2, sections: ["A", "B"], capacity_per_section: 30 },
+  { name: "Grade 3", code: "3", level_order: 3, sections: ["A", "B"], capacity_per_section: 30 },
+  { name: "Grade 4", code: "4", level_order: 4, sections: ["A", "B"], capacity_per_section: 30 },
+  { name: "Grade 5", code: "5", level_order: 5, sections: ["A", "B"], capacity_per_section: 30 },
+  { name: "Grade 6", code: "6", level_order: 6, sections: ["A", "B"], capacity_per_section: 35 },
+  { name: "Grade 7", code: "7", level_order: 7, sections: ["A", "B"], capacity_per_section: 35 },
+  { name: "Grade 8", code: "8", level_order: 8, sections: ["A", "B"], capacity_per_section: 35 },
+  { name: "Grade 9", code: "9", level_order: 9, sections: ["A", "B"], capacity_per_section: 35 },
+  { name: "Grade 10", code: "10", level_order: 10, sections: ["A", "B"], capacity_per_section: 35 },
+  { name: "Grade 11", code: "11", level_order: 11, sections: ["A", "B"], capacity_per_section: 35 },
+  { name: "Grade 12", code: "12", level_order: 12, sections: ["A", "B"], capacity_per_section: 35 },
+];
+
+export const PRESET_SECONDARY: GradeConfig[] = [
+  { name: "Grade 6", code: "6", level_order: 6, sections: ["A", "B", "C"], capacity_per_section: 35 },
+  { name: "Grade 7", code: "7", level_order: 7, sections: ["A", "B", "C"], capacity_per_section: 35 },
+  { name: "Grade 8", code: "8", level_order: 8, sections: ["A", "B", "C"], capacity_per_section: 35 },
+  { name: "Grade 9", code: "9", level_order: 9, sections: ["A", "B", "C"], capacity_per_section: 35 },
+  { name: "Grade 10", code: "10", level_order: 10, sections: ["A", "B", "C"], capacity_per_section: 35 },
+  { name: "Grade 11", code: "11", level_order: 11, sections: ["A", "B"], capacity_per_section: 30 },
+  { name: "Grade 12", code: "12", level_order: 12, sections: ["A", "B"], capacity_per_section: 30 },
+];
+
+export const PRESET_PRIMARY: GradeConfig[] = [
+  { name: "Pre-K", code: "PK", level_order: -1, sections: ["A"], capacity_per_section: 20 },
+  { name: "Kindergarten", code: "KG", level_order: 0, sections: ["A", "B"], capacity_per_section: 25 },
+  { name: "Grade 1", code: "1", level_order: 1, sections: ["A", "B"], capacity_per_section: 28 },
+  { name: "Grade 2", code: "2", level_order: 2, sections: ["A", "B"], capacity_per_section: 28 },
+  { name: "Grade 3", code: "3", level_order: 3, sections: ["A", "B"], capacity_per_section: 28 },
+  { name: "Grade 4", code: "4", level_order: 4, sections: ["A", "B"], capacity_per_section: 30 },
+  { name: "Grade 5", code: "5", level_order: 5, sections: ["A", "B"], capacity_per_section: 30 },
+];
 
 
 export const MOCK_STUDENTS: Student[] = [

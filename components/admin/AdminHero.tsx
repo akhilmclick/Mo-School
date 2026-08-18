@@ -2,6 +2,7 @@
 
 import React from "react";
 import { ShieldCheck, Users, GraduationCap, CalendarCheck, Bell } from "lucide-react";
+import { useAuth } from "@/lib/context/AuthContext";
 
 interface AdminHeroProps {
   totalStudents: number;
@@ -16,6 +17,8 @@ export function AdminHero({
   todayAttendancePercent,
   totalNotices,
 }: AdminHeroProps) {
+  const { school } = useAuth();
+
   return (
     <div className="space-y-4 mb-6">
       {/* Dark Slate Hero Card */}
@@ -27,17 +30,18 @@ export function AdminHero({
           <div>
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md text-xs font-semibold tracking-wide uppercase text-white mb-2 border border-white/10">
               <ShieldCheck className="w-3.5 h-3.5 text-blue-400" />
-              School Administration Console
+              School Administration Console • {school?.code || "CAMPUS"}
             </div>
             <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
-              Beacon Crest Academy
+              {school?.name || "Beacon Crest Academy"}
             </h1>
             <p className="text-sm text-slate-300 font-medium mt-1">
-              Mid-Size Campus Overview • Active Term 2 (2026 Academic Year)
+              Active Session • {school?.academic_year || "2026-2027"} ({school?.current_term || "Term 1"})
             </p>
           </div>
         </div>
       </div>
+
 
       {/* 4 Key Metric Counters */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5">

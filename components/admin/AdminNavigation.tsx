@@ -13,7 +13,7 @@ interface AdminNavigationProps {
 }
 
 export function AdminNavigation({ activeTab, onChangeTab }: AdminNavigationProps) {
-  const { logout, user } = useAuth();
+  const { logout, user, school } = useAuth();
   const router = useRouter();
 
   const navItems = [
@@ -24,18 +24,23 @@ export function AdminNavigation({ activeTab, onChangeTab }: AdminNavigationProps
     { id: "attendance" as AdminTab, label: "Attendance", icon: CalendarCheck },
   ];
 
+  const brandInitial = school?.name ? school.name[0] : "A";
+
   return (
     <div className="hidden lg:flex flex-col w-64 bg-white border-r border-slate-100 p-5 shrink-0 min-h-screen sticky top-0">
       {/* Brand Header */}
       <div className="flex items-center gap-3 pb-6 border-b border-slate-100">
         <div className="w-10 h-10 rounded-2xl bg-[#111827] text-white flex items-center justify-center font-black text-lg shadow-sm">
-          A
+          {brandInitial}
         </div>
-        <div>
-          <h2 className="font-extrabold text-sm text-slate-900 leading-tight">Aura Crest</h2>
+        <div className="min-w-0">
+          <h2 className="font-extrabold text-sm text-slate-900 leading-tight truncate">
+            {school?.name || "Aura Crest"}
+          </h2>
           <span className="text-[11px] text-slate-400 font-medium">Administration Hub</span>
         </div>
       </div>
+
 
       {/* Nav List */}
       <div className="py-6 space-y-1.5 flex-1">
