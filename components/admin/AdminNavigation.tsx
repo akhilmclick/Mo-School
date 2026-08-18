@@ -24,7 +24,7 @@ export function AdminNavigation({ activeTab, onChangeTab }: AdminNavigationProps
     { id: "attendance" as AdminTab, label: "Attendance", icon: CalendarCheck },
   ];
 
-  const brandInitial = school?.name ? school.name[0] : "A";
+  const brandInitial = school?.name ? school.name[0] : "M";
 
   return (
     <div className="hidden lg:flex flex-col w-64 bg-white border-r border-slate-100 p-5 shrink-0 min-h-screen sticky top-0">
@@ -35,11 +35,12 @@ export function AdminNavigation({ activeTab, onChangeTab }: AdminNavigationProps
         </div>
         <div className="min-w-0">
           <h2 className="font-extrabold text-sm text-slate-900 leading-tight truncate">
-            {school?.name || "Aura Crest"}
+            {school?.name || "Mo-School"}
           </h2>
           <span className="text-[11px] text-slate-400 font-medium">Administration Hub</span>
         </div>
       </div>
+
 
 
       {/* Nav List */}

@@ -59,8 +59,9 @@ export default function LoginPage() {
               <GraduationCap className="w-7 h-7 text-orange-400" />
             </div>
             <h2 className="text-xs font-extrabold uppercase tracking-widest text-slate-400">
-              Aura Crest Academy
+              Mo-School
             </h2>
+
             <h1 className="text-2xl font-black text-slate-900 tracking-tight mt-1">
               Welcome Back
             </h1>

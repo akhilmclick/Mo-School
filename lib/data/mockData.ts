@@ -13,15 +13,16 @@ import {
 
 export const DEFAULT_SCHOOL_PROFILE: SchoolProfile = {
   id: "sch-001",
-  name: "Beacon Crest Academy",
-  slug: "beacon-crest",
-  code: "BCA-2026",
-  email: "admin@beaconcrest.edu",
+  name: "Mo-School Academy",
+  slug: "mo-school",
+  code: "MOS-2026",
+  email: "admin@moschool.edu",
   phone: "+1 (555) 342-9000",
   address: "1000 Beacon Way, Springfield, IL 62701",
-  website: "https://beaconcrest.edu",
+  website: "https://moschool.edu",
   logo_url: "https://images.unsplash.com/photo-1594608661623-aa0bd3a69d98?w=150&auto=format&fit=crop&q=80",
   motto: "Knowledge, Character, and Innovation for Tomorrow's Leaders",
+
   academic_year: "2026-2027",
   current_term: "Term 2",
   term_system: "terms",

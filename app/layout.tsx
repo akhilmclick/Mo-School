@@ -4,9 +4,10 @@ import { AuthProvider } from "@/lib/context/AuthContext";
 import { DemoSwitcher } from "@/components/ui/DemoSwitcher";
 
 export const metadata: Metadata = {
-  title: "Aura Crest Academy - School Management Portal",
+  title: "Mo-School - School Management Portal",
   description: "Unified Portal for Parents, Teachers, and Administration",
 };
+
 
 export default function RootLayout({
   children,

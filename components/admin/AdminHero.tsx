@@ -33,8 +33,9 @@ export function AdminHero({
               School Administration Console • {school?.code || "CAMPUS"}
             </div>
             <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
-              {school?.name || "Beacon Crest Academy"}
+              {school?.name || "Mo-School Academy"}
             </h1>
+
             <p className="text-sm text-slate-300 font-medium mt-1">
               Active Session • {school?.academic_year || "2026-2027"} ({school?.current_term || "Term 1"})
             </p>
